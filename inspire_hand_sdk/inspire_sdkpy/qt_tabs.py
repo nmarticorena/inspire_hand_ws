@@ -2,7 +2,7 @@ import pyqtgraph as pg
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTabWidget, QWidget, QGridLayout,QLabel,QVBoxLayout
 from .inspire_hand_defaut import *
-import colorcet  # 确保安装 colorcet 库
+import colorcet  # Ensure the colorcet library is installed
 import numpy as np
 import time
 
@@ -19,47 +19,47 @@ class ImageTab(QWidget):
         self.create_images()
 
     def create_images(self):
-        num_cols = 4  # 每行的列数
-        num_rows = (len(data_sheet) + num_cols - 1) // num_cols  # 计算行数
+        num_cols = 4  # Number of columns per row
+        num_rows = (len(data_sheet) + num_cols - 1) // num_cols  # Calculate number of rows
         self.plots = []
         self.color_maps = []
         self.color_bars = []
         for i, (name, addr, length, size, var) in enumerate(self.data_sheet):
                 
-            row = i // num_cols  # 计算当前行
-            col = i % num_cols  # 计算当前列            # 创建随机大小的图像数据
+            row = i // num_cols  # Calculate current row
+            col = i % num_cols  # Calculate current column            # Create random size image data
             # width = random.randint(50, 100)
             # height = random.randint(50, 150)
-            # image_data = np.random.rand(height, width)  # 生成二维图像数据
+            # image_data = np.random.rand(height, width)  # Generate 2D image data
 
-            # 创建图形布局窗口
+            # Create graphics layout window
             layout_widget = pg.GraphicsLayoutWidget(show=True)
             plot_item = layout_widget.addPlot(row=0, col=0)
-            # 为图块设置名字
+            # Set name for the plot
             plot_item.setTitle(name)
             img_item = pg.ImageItem(np.random.rand(size[0],size[1]))
             plot_item.addItem(img_item)
             self.plots.append(img_item)
 
-            # 创建颜色映射
+            # Create color map
             color_map = pg.ColorMap(pos=np.linspace(0, 1, 256), color=colorcet.fire[:256])
             self.color_maps.append(color_map)
 
-            # 创建颜色条
+            # Create color bar
             color_bar = pg.ColorBarItem(colorMap=color_map, values=(0, 1), width=5, orientation='h')
             self.color_bars.append(color_bar)
             layout_widget.addItem(color_bar, row=1, col=0)
 
-            # 将图形布局添加到网格
+            # Add graphics layout to grid
             self.grid_layout.addWidget(layout_widget, row, col)
     def update_plot(self,data_dict):
         for i, (name, addr, length, size,var) in enumerate(self.data_sheet):
-            self.plots[i].setImage(data_dict[var], autoLevels=True)  # 更新图像数据
+            self.plots[i].setImage(data_dict[var], autoLevels=True)  # Update image data
             max_val = np.max(data_dict[var])
-            self.plots[i].setLevels((0, max_val))  # 设置图像颜色范围
-            # 更新颜色条
-            self.color_bars[i].setLevels((0, max_val))  # 更新颜色条的范围
-            self.plots[i].setColorMap(self.color_maps[i])  # 设置颜色映射
+            self.plots[i].setLevels((0, max_val))  # Set image color range
+            # Update color bar
+            self.color_bars[i].setLevels((0, max_val))  # Update color bar range
+            self.plots[i].setColorMap(self.color_maps[i])  # Set color map
 
 class CurveTab(QWidget):
     def __init__(self,datas=data_sheet,history_len=100):
@@ -72,13 +72,13 @@ class CurveTab(QWidget):
         self.data_sheet=datas
         self.history_length = history_len
         self.history = {
-        'POS_ACT': [np.zeros(history_len) for _ in range(6)],   # 6 个数据点
-        'ANGLE_ACT': [np.zeros(history_len) for _ in range(6)], # 6 个数据点
-        'FORCE_ACT': [np.zeros(history_len) for _ in range(6)], # 6 个数据点
-        'CURRENT': [np.zeros(history_len) for _ in range(6)],   # 6 个数据点
-        'ERROR': [np.zeros(history_len) for _ in range(6)],     # 6 个数据点
-        'STATUS': [np.zeros(history_len) for _ in range(6)],    # 6 个数据点
-        'TEMP': [np.zeros(history_len) for _ in range(6)]       # 6 个数据点
+        'POS_ACT': [np.zeros(history_len) for _ in range(6)],   # 6 data points
+        'ANGLE_ACT': [np.zeros(history_len) for _ in range(6)], # 6 data points
+        'FORCE_ACT': [np.zeros(history_len) for _ in range(6)], # 6 data points
+        'CURRENT': [np.zeros(history_len) for _ in range(6)],   # 6 data points
+        'ERROR': [np.zeros(history_len) for _ in range(6)],     # 6 data points
+        'STATUS': [np.zeros(history_len) for _ in range(6)],    # 6 data points
+        'TEMP': [np.zeros(history_len) for _ in range(6)]       # 6 data points
         }
         self.create_curves()
         
@@ -87,12 +87,12 @@ class CurveTab(QWidget):
         self.error_label = QLabel("ERROR: ")
         self.status_label = QLabel("STATUS: ")
         
-        self.layout.addWidget(self.error_label)  # 添加ERROR标签
-        self.layout.addWidget(self.status_label)  # 添加STATUS标签
+        self.layout.addWidget(self.error_label)  # Add ERROR label
+        self.layout.addWidget(self.status_label)  # Add STATUS label
         
         self.plot_items = {name: pg.PlotWidget() for name in ['POS_ACT', 'ANGLE_ACT', 'FORCE_ACT', 'CURRENT', 'ERROR', 'STATUS', 'TEMP']}
         for i, (name, plot_widget) in enumerate(self.plot_items.items()):
-                self.grid_layout.addWidget(plot_widget, i // 2, i % 2)  # 每行两个图
+                self.grid_layout.addWidget(plot_widget, i // 2, i % 2)  # Two plots per row
                 plot_widget.setTitle(name)
                 plot_widget.setLabel('left', 'Y-axis')
                 plot_widget.setLabel('bottom', 'X-axis')
@@ -120,16 +120,16 @@ class CurveTab(QWidget):
     #     'TEMP': TEMP
     # }
     def update_plot(self,data_dict):
-        # 更新每个曲线的数据
+        # Update data for each curve
         try:
-            # 更新每个曲线的数据
+            # Update data for each curve
             for category, datas in data_dict.items():
                 if datas is not None:
                     for i in range(len(datas)):
-                        # 追加新的数据点到历史记录，并移除最老的数据点
+                        # Append new data point to history and remove the oldest
                         self.history[category][i] = np.roll(self.history[category][i], -1)
                         self.history[category][i][-1] = datas[i]
-                        # 更新曲线
+                        # Update curve
                         self.curves[category][i].setData(self.history[category][i])
                 else:
                     raise ValueError(f"Data for category '{category}' is None")
@@ -139,8 +139,8 @@ class CurveTab(QWidget):
             self.status_label.setText("STATUS: " + ', '.join(['%s' % status_codes[s] for s in data_dict['STATUS']]))
 
         except Exception as e:
-            print(f"Error updating plot: {e}")  # 打印具体的错误信息
-            print(f"Data received: {data_dict}")  # 打印接收到的数据以便调试
+            print(f"Error updating plot: {e}")  # Print specific error message
+            print(f"Data received: {data_dict}")  # Print received data for debugging
             raise RuntimeError(f"Failed to update plot due to: {e}")
   
   
@@ -164,9 +164,9 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.tabs)
         
     def update_plot(self):
-        start_time = time.time()  # 记录开始时间
+        start_time = time.time()  # Record start time
         data_dict =self.data_handler.read()
-        end_time = time.time()  # 记录结束时间
+        end_time = time.time()  # Record end time
         self.curve_tab.update_plot(data_dict['states'])
         if self.Plot_touch_:
             self.image_tab.update_plot(data_dict['touch'])

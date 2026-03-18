@@ -19,7 +19,7 @@ find_package(Boost COMPONENTS program_options REQUIRED)
 set(CMAKE_PREFIX_PATH /opt/unitree_robotics)
 find_package(unitree_sdk2 REQUIRED)
 
-# 输出相关变量
+# Output related variables
 if(unitree_sdk2_FOUND)
     message(STATUS "Found unitree_sdk2.")
     get_target_property(unitree_sdk2_includes unitree_sdk2 INTERFACE_INCLUDE_DIRECTORIES)

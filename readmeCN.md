@@ -1,38 +1,38 @@
 
 ---
 
-# 灵巧手SDK使用说明
+# Dexterous Hand SDK User Guide
 
-## 环境管理
+## Environment Management
 
-建议使用 `venv` 进行虚拟环境管理：
+It is recommended to use `venv` for virtual environment management:
 
 ```bash
-python -m venv venv # 或 解压venv_x86.tar.xz,将其中的.venv放置在inspire_hand_ws/.venv
+python -m venv venv # or extract venv_x86.tar.xz and place .venv in inspire_hand_ws/.venv
 
-# 之后执行脚本对venv进行修改：
+# Then run the following scripts to update the venv paths:
 python update_venv_path.py .venv
 python update_bin_files.py .venv 
 
-source venv/bin/activate  # Linux/MacOS 激活虚拟环境
+source venv/bin/activate  # Linux/MacOS activate virtual environment
 ```
 
-## 安装依赖
+## Installing Dependencies
 
-1. 当自行配置环境时，需要安装项目依赖；如果你使用 Unzip venv_x86.tar.xz 去设置环境，则不需要运行以下命令：
+1. When setting up the environment manually, install the project dependencies; if you use Unzip venv_x86.tar.xz to set up the environment, you do not need to run the following commands:
 
     ```bash
     pip install -r requirements.txt
     ```
 
-2. 更新子模块：
+2. Update submodules:
 
     ```bash
-    git submodule init  # 初始化子模块
-    git submodule update  # 更新子模块到最新版本
+    git submodule init  # Initialize submodules
+    git submodule update  # Update submodules to the latest version
     ```
 
-3. 分别安装两个SDK：
+3. Install the two SDKs separately:
 
     ```bash
     cd unitree_sdk2_python
@@ -41,7 +41,7 @@ source venv/bin/activate  # Linux/MacOS 激活虚拟环境
     cd ../inspire_hand_sdk
     pip install -e .
     ```
-## 控制模式
+## Control Modes
 
 The Inspire Hand SDK supports multiple control modes, defined as follows:
 
@@ -61,41 +61,41 @@ The Inspire Hand SDK supports multiple control modes, defined as follows:
 - **Mode 13**: `1101` (Angle + Force control + Velocity)
 - **Mode 14**: `1110` (Position + Force control + Velocity)
 - **Mode 15**: `1111` (Angle + Position + Force control + Velocity)
-## 使用示例
+## Usage Examples
 
-以下为几个常用示例的使用说明：
+The following are descriptions of several common usage examples:
 
-1. **DDS 发布控制指令**：
+1. **DDS publish control commands**:
 
-    运行以下脚本来发布控制指令：
+    Run the following script to publish control commands:
     ```bash
     python inspire_hand_sdk/example/dds_publish.py
     ```
 
-2. **DDS 订阅灵巧手状态和触觉传感器数据，并可视化**：
+2. **DDS subscribe to dexterous hand state and tactile sensor data, and visualize**:
 
-    运行以下脚本来订阅灵巧手的状态和传感器数据，并进行数据可视化：
+    Run the following script to subscribe to the dexterous hand state and sensor data, and visualize the data:
     ```bash
     python inspire_hand_sdk/example/dds_subscribe.py
     ```
 
-3. **灵巧手 DDS 驱动（无图模式）**：
+3. **Dexterous Hand DDS driver (headless mode)**:
 
-    使用以下脚本进行无图模式的驱动操作：
+    Use the following script for headless mode operation:
     ```bash
     python inspire_hand_sdk/example/Headless_driver.py
     ```
 
-4. **灵巧手配置面板**：
+4. **Dexterous Hand configuration panel**:
 
-    运行以下脚本来使用灵巧手的配置面板：
+    Run the following script to use the dexterous hand configuration panel:
     ```bash
     python inspire_hand_sdk/example/init_set_inspire_hand.py
     ```
 
-5. **灵巧手 DDS 驱动（面板模式）**：
+5. **Dexterous Hand DDS driver (panel mode)**:
 
-    通过以下脚本进入面板模式，控制灵巧手的 DDS 驱动：
+    Use the following script to enter panel mode and control the dexterous hand DDS driver:
     ```bash
     python inspire_hand_sdk/example/Vision_driver.py
     ```
