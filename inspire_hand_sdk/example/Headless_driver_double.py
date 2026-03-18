@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import multiprocessing
 import time
 from inspire_sdkpy import inspire_sdk, inspire_hand_defaut
@@ -8,13 +9,13 @@ def worker(ip,LR,name,network=None):
     call_count = 0
     start_time = time.perf_counter()
     time.sleep(0.5)
-    
+
     try:
         while True:
             data_dict = handler.read()
             call_count += 1
             time.sleep(0.001)
-            
+
             if call_count % 10 == 0:
                 elapsed_time = time.perf_counter() - start_time
                 frequency = call_count / elapsed_time

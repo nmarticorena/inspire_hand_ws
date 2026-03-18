@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # from inspire_dds import inspire_hand_touch,inspire_hand_ctrl,inspire_hand_state
 # from inspire_dds import inspire_hand_touch,inspire_hand_ctrl,inspire_hand_state
 import sys

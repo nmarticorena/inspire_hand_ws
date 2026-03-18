@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from pymodbus.client import ModbusTcpClient
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget, QLineEdit, QLabel
@@ -74,7 +75,7 @@ class MainWindow(QMainWindow):
         self.modbus = ModbusHandler(ip, port,self.id)  # 替换为实际的 IP 和端口
         self.initUI()
         self.read_registers()
-        
+
     def find_online_devices(self,ip=defaut_ip,port=6000):
         for i in range(100):  # 假设设备 ID 范围为 0 到 99
             self.modbus = ModbusHandler(ip, port,i)  # 替换为实际的 IP 和端口
@@ -87,7 +88,7 @@ class MainWindow(QMainWindow):
                 print(f'未找到在线设备: ID = {i}')
             self.modbus.close()  # 关闭连接
             return device_id
-            
+
     def initUI(self):
         self.setWindowTitle('灵巧手设置')
 
@@ -100,19 +101,19 @@ class MainWindow(QMainWindow):
         write_button = QPushButton('写入设置')
         write_button.clicked.connect(self.save_registers)
         layout.addWidget(write_button)
-        
+
         save_button = QPushButton('保存设置')
         save_button.clicked.connect(self.save)
         layout.addWidget(save_button)
-        
+
         reset_button = QPushButton('恢复出场设置')
         reset_button.clicked.connect(self.reset_para)
         layout.addWidget(reset_button)
-        
+
         clb_button = QPushButton('校准力传感器')
         clb_button.clicked.connect(self.cesture_force_clb)
         layout.addWidget(clb_button)
-        
+
         clean_button = QPushButton('清除错误')
         clean_button.clicked.connect(self.clean_error)
         layout.addWidget(clean_button)
@@ -139,11 +140,11 @@ class MainWindow(QMainWindow):
         print("设置保存寄存器")
 
         pass
-    
+
     def reset_para(self):
         self.modbus.write_register(1006, 1)
         pass
-    
+
     def cesture_force_clb(self):
         self.modbus.write_registers(1486,[1000]*6)
         self.modbus.write_register(1009,1)
@@ -173,16 +174,16 @@ class MainWindow(QMainWindow):
                 if values is not None:
                     for j in range(4):
                         self.register_inputs[address][j].setText(str(values[j]))
-                        
+
             print(f'寄存器: {info["name"]} = {values}')
-            
+
     def read_and_parse_ip(self,values):
         if values is not None and len(values) == 2:
             byte1 = values[0] & 0xFF
             byte2 = (values[0] >> 8) & 0xFF
             byte3 = values[1] & 0xFF
             byte4 = (values[1] >> 8) & 0xFF
-            
+
             ip_bytes = [byte1, byte2, byte3, byte4]
             return ip_bytes
         else:
@@ -193,7 +194,7 @@ class MainWindow(QMainWindow):
         short1 = (values[1] << 8) | values[0]  # 高字节在前，低字节在后
         short2 = (values[3] << 8) | values[2]  # 高字节在前，低字节在后
         return [short1, short2]
-    
+
     def save_registers(self):
         for address, info in registers.items():
             if info["length"] == 1:
@@ -211,7 +212,7 @@ class MainWindow(QMainWindow):
                 values=self.bytes_to_short(values)
                 print(f'写入ip :{self.read_and_parse_ip(values)} , 寄存器 : {values}')
                 self.modbus.write_registers(address,values)
-                      
+
 
             pass
         print("写入所有设置")

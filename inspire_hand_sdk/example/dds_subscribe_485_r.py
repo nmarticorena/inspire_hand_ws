@@ -1,16 +1,17 @@
+#!/usr/bin/env python3
 from unitree_sdk2py.core.channel import ChannelSubscriber, ChannelFactoryInitialize
 
 from inspire_sdkpy import inspire_hand_defaut,inspire_dds
 
 import numpy as np
-import colorcet  
+import colorcet
 import time
 
 import threading
 
 
 class DDSHandler():
-   
+
     def __init__(self,network=None,sub_touch=True,LR='r'):
         super().__init__()  # 调用父类的 __init__ 方法
         if network ==None:
@@ -21,7 +22,7 @@ class DDSHandler():
         if sub_touch:
             self.sub_touch = ChannelSubscriber("rt/inspire_hand/touch/"+LR, inspire_dds.inspire_hand_touch)
             self.sub_touch.Init(self.update_data_touch, 10)
-        
+
         self.sub_states = ChannelSubscriber("rt/inspire_hand/state/"+LR, inspire_dds.inspire_hand_state)
         self.sub_states.Init(self.update_data_state, 10)
         self.touch={}
@@ -41,7 +42,7 @@ class DDSHandler():
             end_time = time.time()  # 记录结束时间
             elapsed_time = end_time - start_time  # 计算耗时
             # print(f"Data update time: {elapsed_time:.6f} seconds")  # 打印耗时
-            
+
     def update_data_state(self,states_msg:inspire_dds.inspire_hand_state):
         with self.data_state_lock:
             self.states= {

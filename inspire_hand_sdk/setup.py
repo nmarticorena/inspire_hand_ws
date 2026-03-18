@@ -1,4 +1,5 @@
 from setuptools import setup, find_packages
+import glob
 
 setup(name='inspire_sdkpy',
       version='1.0.0',
@@ -17,4 +18,5 @@ setup(name='inspire_sdkpy',
             "pymodbus==3.6.9",
             "pyserial"
       ],
+        scripts=glob.glob('examples/*.py')
       )

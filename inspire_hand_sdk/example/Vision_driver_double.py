@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import multiprocessing
 import time
 from inspire_sdkpy import qt_tabs,inspire_sdk,inspire_hand_defaut

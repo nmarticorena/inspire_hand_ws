@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import time
 import sys
 
@@ -17,7 +18,7 @@ if __name__ == '__main__':
     # Create a publisher to publish the data defined in UserData class
     pubr = ChannelPublisher("rt/inspire_hand/ctrl/r", inspire_dds.inspire_hand_ctrl)
     pubr.Init()
-    
+
     publ = ChannelPublisher("rt/inspire_hand/ctrl/l", inspire_dds.inspire_hand_ctrl)
     publ.Init()
     cmd = inspire_hand_defaut.get_inspire_hand_ctrl()
@@ -38,10 +39,10 @@ if __name__ == '__main__':
 
     time.sleep(3.0)
 
-    for cnd in range(100000): 
+    for cnd in range(100000):
 
             # 寄存器起始地址，0x05CE 对应的是 1486
-        start_address = 1486            
+        start_address = 1486
         num_registers = 6  # 6 个寄存器
         # 生成要写入的值列表，每个寄存器为一个 short 值
 
@@ -74,7 +75,7 @@ if __name__ == '__main__':
         # mode 12：1100（力控 + 速度）
         # mode 13：1101（角度 + 力控 + 速度）
         # mode 14：1110（位置 + 力控 + 速度）
-        # mode 15：1111（角度 + 位置 + 力控 + 速度）  
+        # mode 15：1111（角度 + 位置 + 力控 + 速度）
         cmd.angle_set=value_to_write_np.tolist()
         cmd.mode=0b0001
         #Publish message
@@ -85,4 +86,4 @@ if __name__ == '__main__':
             print("Waitting for subscriber.")
 
         time.sleep(0.1)
-        
+

@@ -1,8 +1,9 @@
+#!/usr/bin/env python3
 from inspire_sdkpy import inspire_sdk, inspire_hand_defaut
 import time
 
 if __name__ == "__main__":
-    
+
     ## publish All Data
     # states_structure = [
     #         ('pos_act', 1534, 6, 'short'),
@@ -13,14 +14,14 @@ if __name__ == "__main__":
     #         ('status', 1612, 3, 'byte'),
     #         ('temperature', 1618, 3, 'byte')
     #     ]
-    
+
     ## Only publish this data to increase publishing frequency
     states_structure = [
             ('angle_act', 1546, 6, 'short'),
             ('force_act', 1582, 6, 'short'),
             ('status', 1612, 3, 'byte'),
         ]
-    
+
     handler = inspire_sdk.ModbusDataHandler(LR='l', device_id=2, use_serial=True, serial_port='/dev/ttyUSB0',states_structure=states_structure)
 
     call_count = 0  # 记录调用次数
