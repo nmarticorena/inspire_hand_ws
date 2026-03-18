@@ -18,5 +18,5 @@ setup(name='inspire_sdkpy',
             "pymodbus==3.6.9",
             "pyserial"
       ],
-        scripts=glob.glob('examples/*.py')
+        scripts=glob.glob('example/*.py')
       )
