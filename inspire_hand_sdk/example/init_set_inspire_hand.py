@@ -7,17 +7,17 @@ from pymodbus.exceptions import ConnectionException
 from inspire_sdkpy import defaut_ip
 
 registers = {
-    1000: {"name": "HAND_ID", "description": "灵巧手 ID", "length": 1},
-    1002: {"name": "REDU_RATIO", "description": "波特率设置", "length": 1},
-    1032: {"name": "DEFAULT_SPEED_SET", "description": "各自由度的上电速度设置值", "length": 6},
-    1044: {"name": "DEFAULT_FORCE_SET", "description": "各自由度的上电力控阈值设置值", "length": 6},
+    1000: {"name": "HAND_ID", "description": "Dexterous Hand ID", "length": 1},
+    1002: {"name": "REDU_RATIO", "description": "Baud rate setting", "length": 1},
+    1032: {"name": "DEFAULT_SPEED_SET", "description": "Power-on speed setpoint for each DOF", "length": 6},
+    1044: {"name": "DEFAULT_FORCE_SET", "description": "Power-on force control threshold for each DOF", "length": 6},
     1700: {"name": "ip", "description": "ip part", "length": 2},
 }
 
 register_set={
-    1005: {"name": "SAVE", "description": "保存数据至 Flash", "length": 1},
-    1006: {"name": "RESET_PARA", "description": "恢复出厂设置", "length": 1},
-    1009: {"name": "GESTURE_FORCE_CLB", "description": "受力传感器校准", "length": 1}
+    1005: {"name": "SAVE", "description": "Save data to Flash", "length": 1},
+    1006: {"name": "RESET_PARA", "description": "Restore factory settings", "length": 1},
+    1009: {"name": "GESTURE_FORCE_CLB", "description": "Force sensor calibration", "length": 1}
 
 }
 
@@ -36,11 +36,11 @@ class ModbusHandler:
         self.client = ModbusTcpClient(ip, port)
         try:
             if not self.client.connect():
-                raise ConnectionException(f"无法连接到设备: {ip}:{port}")
-            print(f"成功连接到设备: {ip}:{port}, ID: {id}")
+                raise ConnectionException(f"Unable to connect to device: {ip}:{port}")
+            print(f"Successfully connected to device: {ip}:{port}, ID: {id}")
         except Exception as e:
-            print(f"连接错误: {e}")
-            self.client = None  # 设置为 None，便于后续检查是否连接成功
+            print(f"Connection error: {e}")
+            self.client = None  # Set to None for subsequent connection checks
         self.id = id
 
     def read_register(self, address, count):
@@ -66,55 +66,55 @@ class ModbusHandler:
     def close(self):
         if self.client:
             self.client.close()
-            print("连接已关闭")
+            print("Connection closed")
 
 class MainWindow(QMainWindow):
     def __init__(self,ip=defaut_ip,port=6000):
         super().__init__()
         self.id=self.find_online_devices(ip,port)
-        self.modbus = ModbusHandler(ip, port,self.id)  # 替换为实际的 IP 和端口
+        self.modbus = ModbusHandler(ip, port,self.id)  # Replace with actual IP and port
         self.initUI()
         self.read_registers()
 
     def find_online_devices(self,ip=defaut_ip,port=6000):
-        for i in range(100):  # 假设设备 ID 范围为 0 到 99
-            self.modbus = ModbusHandler(ip, port,i)  # 替换为实际的 IP 和端口
-            res = self.modbus.read_register(1000, 1)  # 尝试读取寄存器 1000
+        for i in range(100):  # Assume device ID range is 0 to 99
+            self.modbus = ModbusHandler(ip, port,i)  # Replace with actual IP and port
+            res = self.modbus.read_register(1000, 1)  # Attempt to read register 1000
             device_id = 0
             if res is not None:
                 device_id = res[0]
-                print(f'找到在线设备: ID = {device_id}')
+                print(f'Online device found: ID = {device_id}')
             else:
-                print(f'未找到在线设备: ID = {i}')
-            self.modbus.close()  # 关闭连接
+                print(f'No online device found: ID = {i}')
+            self.modbus.close()  # Close connection
             return device_id
 
     def initUI(self):
-        self.setWindowTitle('灵巧手设置')
+        self.setWindowTitle('Dexterous Hand Settings')
 
         layout = QVBoxLayout()
 
-        read_button = QPushButton('读取设置')
+        read_button = QPushButton('Read Settings')
         read_button.clicked.connect(self.read_registers)
         layout.addWidget(read_button)
 
-        write_button = QPushButton('写入设置')
+        write_button = QPushButton('Write Settings')
         write_button.clicked.connect(self.save_registers)
         layout.addWidget(write_button)
 
-        save_button = QPushButton('保存设置')
+        save_button = QPushButton('Save Settings')
         save_button.clicked.connect(self.save)
         layout.addWidget(save_button)
 
-        reset_button = QPushButton('恢复出场设置')
+        reset_button = QPushButton('Restore Factory Settings')
         reset_button.clicked.connect(self.reset_para)
         layout.addWidget(reset_button)
 
-        clb_button = QPushButton('校准力传感器')
+        clb_button = QPushButton('Calibrate Force Sensor')
         clb_button.clicked.connect(self.cesture_force_clb)
         layout.addWidget(clb_button)
 
-        clean_button = QPushButton('清除错误')
+        clean_button = QPushButton('Clear Errors')
         clean_button.clicked.connect(self.clean_error)
         layout.addWidget(clean_button)
 
@@ -137,7 +137,7 @@ class MainWindow(QMainWindow):
         self.show()
     def save(self):
         self.modbus.write_register(1005, 1)
-        print("设置保存寄存器")
+        print("Settings save register written")
 
         pass
 
@@ -153,15 +153,15 @@ class MainWindow(QMainWindow):
         self.modbus.write_register(1004,1)
 
     def read_registers(self):
-        print("读取所有设置")
+        print("Reading all settings")
         for address, info in registers.items():
             if info["length"] == 1:
                 values = self.modbus.read_register(address, info["length"] )
                 if values is not None:
                     if info['name']=='REDU_RATIO':
-                        self.register_inputs[address][0].setText(str(baud_rates[values[0]]))  # 假设每个寄存器只有一个输入框
+                        self.register_inputs[address][0].setText(str(baud_rates[values[0]]))  # Assume each register has one input field
                     else:
-                        self.register_inputs[address][0].setText(str(values[0]))  # 假设每个寄存器只有一个输入框
+                        self.register_inputs[address][0].setText(str(values[0]))  # Assume each register has one input field
             elif info["length"] == 6:
                 values = self.modbus.read_register(address, info["length"] )
                 if values is not None:
@@ -169,13 +169,13 @@ class MainWindow(QMainWindow):
                         self.register_inputs[address][j].setText(str(values[j]))
             elif info['name']=='ip':
                 values = self.modbus.read_register(address, 2)
-                print(f'ip 寄存器： {values}')
+                print(f'IP registers: {values}')
                 values = self.read_and_parse_ip(values)
                 if values is not None:
                     for j in range(4):
                         self.register_inputs[address][j].setText(str(values[j]))
 
-            print(f'寄存器: {info["name"]} = {values}')
+            print(f'Register: {info["name"]} = {values}')
 
     def read_and_parse_ip(self,values):
         if values is not None and len(values) == 2:
@@ -187,12 +187,12 @@ class MainWindow(QMainWindow):
             ip_bytes = [byte1, byte2, byte3, byte4]
             return ip_bytes
         else:
-            print('读取失败或返回值不正确')
+            print('Read failed or returned value is incorrect')
             return None
     def bytes_to_short(self, values):
-        # 将 4 个字节合并为 2 个短整型
-        short1 = (values[1] << 8) | values[0]  # 高字节在前，低字节在后
-        short2 = (values[3] << 8) | values[2]  # 高字节在前，低字节在后
+        # Combine 4 bytes into 2 short integers
+        short1 = (values[1] << 8) | values[0]  # High byte first, low byte last
+        short2 = (values[3] << 8) | values[2]  # High byte first, low byte last
         return [short1, short2]
 
     def save_registers(self):
@@ -210,12 +210,12 @@ class MainWindow(QMainWindow):
             elif info['name']=='ip':
                 values = [int(input_field.text()) for input_field in self.register_inputs[address]]
                 values=self.bytes_to_short(values)
-                print(f'写入ip :{self.read_and_parse_ip(values)} , 寄存器 : {values}')
+                print(f'Write IP: {self.read_and_parse_ip(values)}, Registers: {values}')
                 self.modbus.write_registers(address,values)
 
 
             pass
-        print("写入所有设置")
+        print("All settings written")
 
 
     def closeEvent(self, event):

@@ -13,7 +13,7 @@ import threading
 class DDSHandler():
 
     def __init__(self,network=None,sub_touch=True,LR='r'):
-        super().__init__()  # 调用父类的 __init__ 方法
+        super().__init__()  # Call parent class __init__ method
         if network ==None:
             ChannelFactoryInitialize(0)
         else:
@@ -30,18 +30,18 @@ class DDSHandler():
         self.data_touch_lock = threading.Lock()
         self.data_state_lock = threading.Lock()
 
-    # 更新图形的函数
+    # Function to update graphics
     def update_data_touch(self,msg:inspire_dds.inspire_hand_touch):
         with self.data_touch_lock:
-            start_time = time.time()  # 记录开始时间
+            start_time = time.time()  # Record start time
             for i, (name, addr, length, size,var) in enumerate(self.data):
                 value=getattr(msg,var)
                 if value is not None:
                     matrix = np.array(value).reshape(size)
                     self.touch[var]=matrix
-            end_time = time.time()  # 记录结束时间
-            elapsed_time = end_time - start_time  # 计算耗时
-            # print(f"Data update time: {elapsed_time:.6f} seconds")  # 打印耗时
+            end_time = time.time()  # Record end time
+            elapsed_time = end_time - start_time  # Calculate elapsed time
+            # print(f"Data update time: {elapsed_time:.6f} seconds")  # Print elapsed time
 
     def update_data_state(self,states_msg:inspire_dds.inspire_hand_state):
         with self.data_state_lock:

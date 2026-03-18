@@ -41,13 +41,13 @@ if __name__ == '__main__':
 
     for cnd in range(100000):
 
-            # 寄存器起始地址，0x05CE 对应的是 1486
+            # Register start address, 0x05CE corresponds to 1486
         start_address = 1486
-        num_registers = 6  # 6 个寄存器
-        # 生成要写入的值列表，每个寄存器为一个 short 值
+        num_registers = 6  # 6 registers
+        # Generate list of values to write, each register is a short value
 
         if (cnd+1) % 10 == 0:
-            short_value = 1000-short_value  # 要写入的 short 值
+            short_value = 1000-short_value  # Short value to write
 
 
 
@@ -59,23 +59,23 @@ if __name__ == '__main__':
         value_to_write_np=np.clip(value_to_write_np,200,800)
         # value_to_write_np[3]=800
 
-        # 将组合模式按二进制方式实现
-        # mode 0：0000（无操作）
-        # mode 1：0001（角度）
-        # mode 2：0010（位置）
-        # mode 3：0011（角度 + 位置）
-        # mode 4：0100（力控）
-        # mode 5：0101（角度 + 力控）
-        # mode 6：0110（位置 + 力控）
-        # mode 7：0111（角度 + 位置 + 力控）
-        # mode 8：1000（速度）
-        # mode 9：1001（角度 + 速度）
-        # mode 10：1010（位置 + 速度）
-        # mode 11：1011（角度 + 位置 + 速度）
-        # mode 12：1100（力控 + 速度）
-        # mode 13：1101（角度 + 力控 + 速度）
-        # mode 14：1110（位置 + 力控 + 速度）
-        # mode 15：1111（角度 + 位置 + 力控 + 速度）
+        # Implement combined mode in binary:
+        # mode 0:  0000 (no operation)
+        # mode 1:  0001 (angle)
+        # mode 2:  0010 (position)
+        # mode 3:  0011 (angle + position)
+        # mode 4:  0100 (force control)
+        # mode 5:  0101 (angle + force control)
+        # mode 6:  0110 (position + force control)
+        # mode 7:  0111 (angle + position + force control)
+        # mode 8:  1000 (velocity)
+        # mode 9:  1001 (angle + velocity)
+        # mode 10: 1010 (position + velocity)
+        # mode 11: 1011 (angle + position + velocity)
+        # mode 12: 1100 (force control + velocity)
+        # mode 13: 1101 (angle + force control + velocity)
+        # mode 14: 1110 (position + force control + velocity)
+        # mode 15: 1111 (angle + position + force control + velocity)
         cmd.angle_set=value_to_write_np.tolist()
         cmd.mode=0b0001
         #Publish message
